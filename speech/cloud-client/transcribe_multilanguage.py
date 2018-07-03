@@ -25,71 +25,72 @@ Example usage:
 import argparse
 
 
-# [START speech_transcribe_multilang]
+# [START speech_transcribe_multilanguage]
 def speech_transcribe_multilang(speech_file):
-  """Transcribe the given audio file synchronously with
-    the selected model."""
-  from google.cloud import speech_v1p1beta1 as speech
-  client = speech.SpeechClient()
+    """Transcribe the given audio file synchronously with
+      multi language."""
+    from google.cloud import speech_v1p1beta1 as speech
+    client = speech.SpeechClient()
 
-  with open(speech_file, 'rb') as audio_file:
-    content = audio_file.read()
+    with open(speech_file, 'rb') as audio_file:
+        content = audio_file.read()
 
-  audio = speech.types.RecognitionAudio(content=content)
+    audio = speech.types.RecognitionAudio(content=content)
 
-  config = speech.types.RecognitionConfig(
-      encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
-      sample_rate_hertz=16000,
-      language_code='ja-JP',
-      alternative_language_codes=['es-ES', 'en-US'])
+    config = speech.types.RecognitionConfig(
+        encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=16000,
+        language_code='ja-JP',
+        alternative_language_codes=['es-ES', 'en-US'])
 
-  response = client.recognize(config, audio)
+    response = client.recognize(config, audio)
 
-  for i, result in enumerate(response.results):
-    alternative = result.alternatives[0]
-    print('-' * 20)
-    print('First alternative of result {}'.format(i))
-
-
-# [END speech_transcribe_multilang]
+    for i, result in enumerate(response.results):
+        alternative = result.alternatives[0]
+        print('-' * 20)
+        print('First alternative of result {}: {}'.format(i, alternative))
+        print(u'Transcript: {}'.format(alternative.transcript))
 
 
-# [START speech_transcribe_multilang_gcs]
+# [END speech_transcribe_multilanguage]
+
+
+# [START speech_transcribe_multilanguage_gcs]
 def speech_transcribe_multilang_gcs(gcs_uri):
-  """Transcribe the given audio file asynchronously with
-    the selected model."""
-  from google.cloud import speech_v1p1beta1 as speech
-  client = speech.SpeechClient()
+    """Transcribe the given audio file asynchronously with
+      multi language."""
+    from google.cloud import speech_v1p1beta1 as speech
+    client = speech.SpeechClient()
 
-  audio = speech.types.RecognitionAudio(uri=gcs_uri)
+    audio = speech.types.RecognitionAudio(uri=gcs_uri)
 
-  config = speech.types.RecognitionConfig(
-      encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
-      sample_rate_hertz=16000,
-      language_code='ja-JP',
-      alternative_language_codes=['es-ES', 'en-US'])
+    config = speech.types.RecognitionConfig(
+        encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=16000,
+        language_code='ja-JP',
+        alternative_language_codes=['es-ES', 'en-US'])
 
-  print('Waiting for operation to complete...')
-  response = client.recognize(config, audio)
+    print('Waiting for operation to complete...')
+    response = client.recognize(config, audio)
 
-  for i, result in enumerate(response.results):
-    alternative = result.alternatives[0]
-    print('-' * 20)
-    print('First alternative of result {}'.format(i))
-    print(u'Transcript: {}'.format(alternative.transcript))
+    for i, result in enumerate(response.results):
+        alternative = result.alternatives[0]
+        print('-' * 20)
+        print('First alternative of result {}: {}'.format(i, alternative))
+        print(u'Transcript: {}'.format(alternative.transcript))
 
 
-# [END speech_transcribe_multilang_gcs]
+# [END speech_transcribe_multilanguage_gcs]
 
 if __name__ == '__main__':
-  parser = argparse.ArgumentParser(
-      description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-  parser.add_argument(
-      'path', help='File or GCS path for audio file to be recognized')
+    parser = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument(
+        'path', help='File or GCS path for audio file to be recognized')
 
-  args = parser.parse_args()
+    args = parser.parse_args()
 
-  if args.path.startswith('gs://'):
-    speech_transcribe_multilang_gcs(args.path)
-  else:
-    speech_transcribe_multilang(args.path)
+    if args.path.startswith('gs://'):
+        speech_transcribe_multilang_gcs(args.path)
+    else:
+        speech_transcribe_multilang(args.path)
