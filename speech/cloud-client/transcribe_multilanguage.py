@@ -16,9 +16,9 @@
 r"""Google Cloud Speech API sample that demonstrates how to request multiple languages.
 
 Example usage:
-    python transcribe_multilang.py \
+    python transcribe_multilanguage.py \
         resources/Google_Gnome.wav
-    python transcribe_multilang.py \
+    python transcribe_multilanguage.py \
         gs://cloud-samples-tests/speech/Google_Gnome.wav
 """
 
@@ -50,8 +50,6 @@ def speech_transcribe_multilang(speech_file):
         print('-' * 20)
         print('First alternative of result {}: {}'.format(i, alternative))
         print(u'Transcript: {}'.format(alternative.transcript))
-
-
 # [END speech_transcribe_multilanguage]
 
 
@@ -78,9 +76,8 @@ def speech_transcribe_multilang_gcs(gcs_uri):
         print('-' * 20)
         print('First alternative of result {}: {}'.format(i, alternative))
         print(u'Transcript: {}'.format(alternative.transcript))
-
-
 # [END speech_transcribe_multilanguage_gcs]
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
