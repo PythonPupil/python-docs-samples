@@ -17,19 +17,20 @@ import re
 import transcribe_multilanguage
 
 RESOURCES = os.path.join(os.path.dirname(__file__), 'resources')
+OUTPUT1 = r'OK Google stream stranger things from Netflix to my TV'
 
 
-def test_transcribe_model_selection_file(capsys):
+def test_transcribe_multilanguage_file(capsys):
     transcribe_multilanguage.speech_transcribe_multilang(
         os.path.join(RESOURCES, 'Google_Gnome.wav'))
     out, err = capsys.readouterr()
 
-    assert re.search(r'the weather outside is sunny', out, re.DOTALL | re.I)
+    assert re.search(OUTPUT1, out, re.DOTALL | re.I)
 
 
-def test_transcribe_model_selection_gcs(capsys):
+def test_transcribe_multilanguage_gcs(capsys):
     transcribe_multilanguage.speech_transcribe_multilang_gcs(
         'gs://cloud-samples-tests/speech/Google_Gnome.wav')
     out, err = capsys.readouterr()
 
-    assert re.search(r'the weather outside is sunny', out, re.DOTALL | re.I)
+    assert re.search(OUTPUT1, out, re.DOTALL | re.I)

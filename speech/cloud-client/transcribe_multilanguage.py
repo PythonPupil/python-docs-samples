@@ -13,7 +13,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-r"""Google Cloud Speech API sample that demonstrates how to request multiple languages.
+r"""Google Cloud Speech API sample that demonstrates how to request
+multiple languages.
 
 Example usage:
     python transcribe_multilanguage.py \
@@ -43,6 +44,7 @@ def speech_transcribe_multilang(speech_file):
         language_code='ja-JP',
         alternative_language_codes=['es-ES', 'en-US'])
 
+    print('Waiting for operation to complete...')
     response = client.recognize(config, audio)
 
     for i, result in enumerate(response.results):
@@ -81,7 +83,8 @@ def speech_transcribe_multilang_gcs(gcs_uri):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         'path', help='File or GCS path for audio file to be recognized')
 
