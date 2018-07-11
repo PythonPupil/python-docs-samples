@@ -21,6 +21,7 @@ Example usage:
     python beta_snippets.py enhanced-model resources/commercial_mono.wav
     python beta_snippets.py metadata resources/commercial_mono.wav
     python beta_snippets.py punctuation resources/commercial_mono.wav
+    python beta_snippets.py multi-language resources/commercial_mono.wav
 """
 
 import argparse
@@ -126,6 +127,35 @@ def transcribe_file_with_auto_punctuation(path):
 # [END speech_transcribe_file_with_auto_punctuation]
 
 
+# [START speech_transcribe_multilanguage]
+def transcribe_file_with_multilanguage(speech_file):
+    """Transcribe the given audio file synchronously with
+      multi language."""
+    from google.cloud import speech_v1p1beta1 as speech
+    client = speech.SpeechClient()
+
+    with open(speech_file, 'rb') as audio_file:
+        content = audio_file.read()
+
+    audio = speech.types.RecognitionAudio(content=content)
+
+    config = speech.types.RecognitionConfig(
+        encoding=speech.enums.RecognitionConfig.AudioEncoding.LINEAR16,
+        sample_rate_hertz=16000,
+        language_code='ja-JP',
+        alternative_language_codes=['es-ES', 'en-US'])
+
+    print('Waiting for operation to complete...')
+    response = client.recognize(config, audio)
+
+    for i, result in enumerate(response.results):
+        alternative = result.alternatives[0]
+        print('-' * 20)
+        print('First alternative of result {}: {}'.format(i, alternative))
+        print(u'Transcript: {}'.format(alternative.transcript))
+# [END speech_transcribe_multilanguage]
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -142,3 +172,5 @@ if __name__ == '__main__':
         transcribe_file_with_metadata(args.path)
     elif args.command == 'punctuation':
         transcribe_file_with_auto_punctuation(args.path)
+    elif args.command == 'multi-language':
+        transcribe_file_with_multilanguage(args.path)
